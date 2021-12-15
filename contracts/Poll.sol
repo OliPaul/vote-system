@@ -7,7 +7,7 @@ contract Poll {
         uint voteWeight; // weight for final vote =====> 30% if !isDelegate else 70%
         bool votedForDelegate;  // if true, that person already voted for a delegate
         bool votedForChairPerson;  // if true, that person already voted for the chairperson
-        string location; // location of voter
+        bytes32 location; // location of voter
         uint vote;   // index of the voted candidate
         bool isDelegate;
         uint voteCount;
@@ -23,17 +23,17 @@ contract Poll {
     Candidate[] public presidentialCandidates;
     Voter[] public delegateCandidates;
 
-    function addDelegateCandidate(Voter voter) public {
+    function addDelegateCandidate(Voter memory voter) public {
         delegateCandidates.push(voter);
     }
 
-    function registerAsDelegateCandidate(string name, string location) public {
-        Voter voter = Voter({
+    function registerAsDelegateCandidate(bytes32 name, bytes32 location) public {
+        Voter memory voter = Voter({
             name : name,
-            voteWeight: 0.7,
+            voteWeight: 70,
             votedForDelegate: false,
             votedForChairPerson: false,
-            location: "",
+            location: location,
             vote: 0,
             isDelegate: false,
             voteCount: 0
@@ -58,12 +58,9 @@ contract Poll {
             "You cannot vote for delegate that's not candidate in your location");
         sender.votedForDelegate = true;
         sender.vote = delegateCandidate;
-        delegateCandidates[delegateCandidate].voteCount += sender.weight;
+        delegateCandidates[delegateCandidate].voteCount += 1;
     }
 
     //function winningDelegatesPoll() public view returns (uint winning)
 
-    function Poll(){
-
-    }
 }
