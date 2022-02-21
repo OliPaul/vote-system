@@ -77,7 +77,7 @@ contract Poll {
     //Create the first ballot to elect the delegate per location
     function delegatesPoll(uint delegateCandidate) public {
         Voter storage sender = voters[msg.sender];
-        require(!sender.isDelegate, "You're alse delegate. You cannot vote at this step !");
+        require(!sender.isDelegate, "You're also delegate. You cannot vote at this step !");
         require(!sender.votedForDelegate, "You're already voted for your delegate.");
         require(delegateCandidates.length > 1, "Not enough delegates for the vote.");
         sender.votedForDelegate = true;
@@ -88,7 +88,7 @@ contract Poll {
     function presidentialPoll(uint presidentialCandidate) public {
         Voter storage sender = voters[msg.sender];
         Voter[] memory winningDelegates = winningDelegatesPoll();
-        require(!sender.votedForChairPerson, "You're already voted for your delegate.");
+        require(!sender.votedForChairPerson, "You're already voted for your chairperson.");
         sender.votedForChairPerson = true;
         sender.vote = presidentialCandidate;
         for(uint i = 0; i < winningDelegates.length; i++) {
@@ -113,7 +113,7 @@ contract Poll {
         winningDelegatesPoll_ = delegates;
     }
 
-    function winningPresidentialPoll() public view returns (Candidate memory winningPresidentialPoll_) {
+        function winningPresidentialPoll() public view returns (Candidate memory winningPresidentialPoll_) {
         uint voteCount = 0;
         for (uint i = 0; i < presidentialCandidates.length; i++) {
             if (presidentialCandidates[i].voteCount > voteCount) {
